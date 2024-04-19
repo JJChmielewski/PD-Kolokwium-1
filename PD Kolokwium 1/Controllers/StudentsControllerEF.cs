@@ -57,5 +57,12 @@ namespace BazyDanych.Controllers
         {
             return service.getHistory(page, pageSize);
         }
+
+        [HttpGet]
+        [Route("/history/db")]
+        public List<HistoryDTO> showHistoryDb([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            return serviceDB.getHistory(page, pageSize);
+        }
     }
 }

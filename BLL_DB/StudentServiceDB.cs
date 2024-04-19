@@ -1,5 +1,6 @@
 ﻿using BLL;
 using BLL.DTO;
+using DAL.Models;
 using Microsoft.Data.SqlClient;
 
 namespace BLL_DB
@@ -23,7 +24,30 @@ namespace BLL_DB
 
         public List<HistoryDTO> getHistory(int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            string historyRaw = executeSql(String.Format("exec dbo.ShowHistory {0}, {1}", pageNumber, pageSize));
+            string[] historyRows = historyRaw.Split("\n");
+            List<HistoryDTO> historyDTOs = new List<HistoryDTO>();
+            foreach(string row in historyRows)
+            {
+                if (string.IsNullOrEmpty(row))
+                {
+                    break;
+                }
+
+                string[] rowSplit = row.Split(";");
+                HistoryDTO temp = new HistoryDTO();
+                temp.Id = Int32.Parse(rowSplit[0]);
+                temp.Name = rowSplit[1];
+                temp.Surname = rowSplit[2];
+                temp.GroupName = rowSplit[3];
+                HistoryAction action = (HistoryAction)2;
+                temp.HistoryAction = ((HistoryAction)Int32.Parse(rowSplit[4])).ToString();
+                temp.Date = DateTime.Parse(rowSplit[5]);
+
+                historyDTOs.Add(temp);
+            }
+
+            return historyDTOs;
         }
 
         public StudentDTO getStudentById(int id)
