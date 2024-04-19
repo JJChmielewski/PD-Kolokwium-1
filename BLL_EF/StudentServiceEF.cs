@@ -1,7 +1,7 @@
 ﻿using BLL;
 using BLL.DTO;
 using DAL;
-using PD_Kolokwium_1.Models;
+using DAL.Models;
 
 namespace BLL_EF
 {
@@ -13,7 +13,6 @@ namespace BLL_EF
         public void addStudent(StudentDTO student)
         {
             Student studentModel = new Student();
-            studentModel.Id = context.students.Count() + 1;
             studentModel.Name = student.Name;
             studentModel.Surname = student.Surname;
             studentModel.GroupId = student.GroupId;
@@ -21,7 +20,6 @@ namespace BLL_EF
             context.students.Add(studentModel);
 
             History history = new History();
-            history.Id = context.history.Count() + 1;
             history.Name = student.Name;
             history.Surname = student.Surname;
             history.GroupId = student.GroupId;
@@ -43,7 +41,6 @@ namespace BLL_EF
             }
 
             History history = new History();
-            history.Id = context.history.Count() + 1;
             history.Name = student.Name;
             history.Surname = student.Surname;
             history.GroupId = student.GroupId;
@@ -74,6 +71,37 @@ namespace BLL_EF
             return studentDTOs;
         }
 
+        public List<HistoryDTO> getHistory(int pageNumber, int pageSize)
+        {
+            int startingIndex = (pageNumber - 1) * pageSize;
+            int endingIndex = startingIndex + pageSize;
+            List<HistoryDTO> historyDTOs = new List<HistoryDTO>();
+
+            for (; startingIndex < context.history.Count() && startingIndex < endingIndex; startingIndex++)
+            {
+                HistoryDTO temp = new HistoryDTO();
+                History? history = context.history.ElementAt(startingIndex);
+                if (history == null) {
+                    break;
+                }
+
+                temp.Id = history.Id;
+                temp.Name = history.Name;
+                temp.Surname = history.Surname;
+                temp.HistoryAction = history.HistoryAction.ToString();
+                if (history.GroupId != null)
+                {
+                    context.Entry(history).Reference(h => h.Group).Load();
+                    temp.GroupName = history.Group.Name;
+                }
+                
+                temp.Date = history.Date;
+                historyDTOs.Add(temp);
+            }
+
+            return historyDTOs;
+        }
+
         public StudentDTO? getStudentById(int id)
         {
             Student? student = context.students.Where(s => s.Id == id).First();
@@ -102,7 +130,6 @@ namespace BLL_EF
             studentModel.GroupId = student.GroupId;
 
             History history = new History();
-            history.Id = context.history.Count() + 1;
             history.Name = student.Name;
             history.Surname = student.Surname;
             history.GroupId = student.GroupId;

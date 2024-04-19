@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PD_Kolokwium_1.Models
+namespace DAL.Models
 {
     public class Student
     {

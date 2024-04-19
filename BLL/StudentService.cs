@@ -20,5 +20,7 @@ namespace BLL
 
         public StudentDTO getStudentById(int id);
 
+        public List<HistoryDTO> getHistory(int pageNumber, int pageSize);
+
     }
 }

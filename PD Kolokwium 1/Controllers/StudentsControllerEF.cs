@@ -1,5 +1,4 @@
-﻿using BLL.DTOModels;
-using BLL.ServiceInterfaces;
+﻿using BLL.DTO;
 using BLL_EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,20 +10,43 @@ namespace BazyDanych.Controllers
     public class StudentsControllerEF : ControllerBase
     {
 
+        private StudentServiceEF service = new StudentServiceEF();
+
         [HttpGet]
-        public List<ProductResponseDTO> getProducts()
+        public List<StudentDTO> getStudents()
         {
-            return service.getProducts();
+            return service.getAllStudents();
+        }
+
+        [HttpGet("{id}", Name = "StudentId")]
+        public StudentDTO? getStudentById([FromRoute] int id)
+        {
+            return service.getStudentById(id);
         }
 
         [HttpPost]
-        public void addProduct([FromQuery] string name, [FromQuery] double price, [FromQuery] int groupId)
+        public void addStudent([FromBody] StudentDTO student)
         {
-            service.addProduct(name, price, groupId);
+            service.addStudent(student);
         }
 
+        [HttpDelete]
+        public void deleteStudent(int id)
+        {
+            service.deleteStudent(id);
+        }
 
+        [HttpPut]
+        public void updateStudent([FromBody] StudentDTO student)
+        {
+            service.updateStudent(student);
+        }
 
-
+        [HttpGet]
+        [Route("/history")]
+        public List<HistoryDTO> showHistory([FromQuery]int page,[FromQuery] int  pageSize)
+        {
+            return service.getHistory(page, pageSize);
+        }
     }
 }

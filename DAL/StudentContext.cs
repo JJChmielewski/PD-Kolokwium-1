@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PD_Kolokwium_1.Models;
+using DAL.Models;
 
 namespace DAL
 {
