@@ -1,4 +1,5 @@
 ﻿using BLL.DTO;
+using BLL_DB;
 using BLL_EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace BazyDanych.Controllers
     {
 
         private StudentServiceEF service = new StudentServiceEF();
+        private StudentServiceDB serviceDB = new StudentServiceDB();
 
         [HttpGet]
         public List<StudentDTO> getStudents()
@@ -28,6 +30,13 @@ namespace BazyDanych.Controllers
         public void addStudent([FromBody] StudentDTO student)
         {
             service.addStudent(student);
+        }
+
+        [HttpPost]
+        [Route("db")]
+        public void addStudentDb([FromBody] StudentDTO student)
+        {
+            serviceDB.addStudent(student);
         }
 
         [HttpDelete]
