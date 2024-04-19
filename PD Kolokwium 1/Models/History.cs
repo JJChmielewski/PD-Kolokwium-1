@@ -22,6 +22,6 @@ namespace PD_Kolokwium_1.Models
 
     public enum HistoryAction
     {
-        Delete, Edit
+        Delete, Edit, Add
     }
 }
